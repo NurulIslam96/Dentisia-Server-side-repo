@@ -25,7 +25,18 @@ async function dbConnect (){
 dbConnect();
 
 //DB collections
-const serviceCollection = client.db('dentisia').collection('services');
+const serviceCollection = client.db("dentisia").collection("services");
+console.log(serviceCollection);
+
+app.get('/home', async(req,res)=>{
+    try {
+        const cursor =  serviceCollection.find({})
+        const services = await cursor.limit(3).toArray()
+        res.send(services)
+    } catch (error) {
+        console.log(error.message)
+    }
+})
 
 //Server Connection Status
 app.get('/', (req,res)=>{
