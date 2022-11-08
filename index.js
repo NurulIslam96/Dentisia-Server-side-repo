@@ -76,8 +76,8 @@ app.post("/services", async (req, res) => {
 app.post('/reviews/', async(req,res)=>{
     try {
         const query = req.body;
-        const {serviceId, email, username, photoURL, message} = query;
-        const result = await reviewsCollection.insertOne({serviceId, email, username, photoURL, message, "timestamp": new Date()})
+        const {serviceId, email, username, photoURL, message, name} = query;
+        const result = await reviewsCollection.insertOne({serviceId, email, username, photoURL, message, name ,"timestamp": new Date()})
         res.send(result)
     } catch (error) {
         console.log(error.message)
@@ -89,6 +89,21 @@ app.get('/reviews', async(req,res)=>{
     const query = req.query.serviceId;
     const cursor = await reviewsCollection.find({serviceId: query})
     const result = await cursor.sort({timestamp: -1}).limit(3).toArray()
+    res.send(result)
+})
+
+//Get my reviews
+app.get('/myreviews', async(req,res)=>{
+    const query = req.query.email;
+    const cursor = reviewsCollection.find({"email": query})
+    const result = await cursor.toArray()
+    res.send(result)
+})
+
+//Delete my reviews
+app.delete('/myreviews/:id', async(req,res)=>{
+    const {id} = req.params;
+    const result = await reviewsCollection.deleteOne({_id: ObjectId(id)})
     res.send(result)
 })
 
