@@ -96,7 +96,7 @@ app.get('/reviews', async(req,res)=>{
 app.get('/myreviews', async(req,res)=>{
     const query = req.query.email;
     const cursor = reviewsCollection.find({"email": query})
-    const result = await cursor.toArray()
+    const result = await cursor.sort({_id: -1}).toArray()
     res.send(result)
 })
 
@@ -104,6 +104,14 @@ app.get('/myreviews', async(req,res)=>{
 app.delete('/myreviews/:id', async(req,res)=>{
     const {id} = req.params;
     const result = await reviewsCollection.deleteOne({_id: ObjectId(id)})
+    res.send(result)
+})
+
+//Edit my Review
+app.patch('/editreview/:id', async(req,res)=>{
+    const {id} = req.params;
+    const message = req.body.message;
+    const result = await reviewsCollection.updateOne({_id: ObjectId(id)}, {$set: {message: message}})
     res.send(result)
 })
 
