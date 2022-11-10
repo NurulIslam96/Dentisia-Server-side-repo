@@ -160,6 +160,12 @@ app.delete("/myreviews/:id", async (req, res) => {
 
 //Edit my Review
 
+app.get("/editreview/:id" , async(req,res)=>{
+  const {id} = req.params;
+  const result = await reviewsCollection.findOne({_id: ObjectId(id)})
+  res.send(result)
+})
+
 app.patch("/editreview/:id", async (req, res) => {
   const { id } = req.params;
   const message = req.body.message;
