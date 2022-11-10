@@ -104,9 +104,10 @@ app.post("/services", async (req, res) => {
 app.post("/reviews/", async (req, res) => {
   try {
     const query = req.body;
-    const { serviceId, email, username, photoURL, message, name } = query;
+    const { serviceId, email, username, photoURL, message, name , serviceImg} = query;
     const result = await reviewsCollection.insertOne({
       serviceId,
+      serviceImg,
       email,
       username,
       photoURL,
